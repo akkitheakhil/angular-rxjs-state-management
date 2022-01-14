@@ -1,0 +1,14 @@
+{
+  "posts": [
+    {
+      "title": "Angular - Best framework ever",
+      "description": "This is a post about Angular",
+      "id": 2
+    },
+    {
+      "title": "Hello World",
+      "description": "This is a post about programing",
+      "id": 3
+    }
+  ]
+}

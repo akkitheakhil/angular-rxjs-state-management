@@ -1,0 +1,111 @@
+<div class="container p-4">
+  <div class="columns is-vcentered is-mobile">
+    <div class="column">
+      <h1 class="title">Post</h1>
+    </div>
+    <div class="column">
+      <button class="button is-dark is-pulled-right" (click)="openAddModal()">
+        <span class="icon">
+          <i class="fas fa-plus-square"></i>
+        </span>
+      </button>
+    </div>
+  </div>
+  <section class="section">
+    <div class="block">
+      <div class="level-item">
+        <div class="field has-addons" [formGroup]="searchForm">
+          <p class="control">
+            <input
+              class="input"
+              name="search"
+              type="text"
+              placeholder="Find a post"
+              autocomplete="off"
+              formControlName="search"
+            />
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ng-container *ngIf="getAllPost$ | async as AllPosts">
+    <ng-container [ngSwitch]="AllPosts.state">
+      <ng-container *ngSwitchCase="apiStatus.loading">
+        <progress class="progress is-large is-primary" max="100">60%</progress>
+      </ng-container>
+      <ng-container *ngSwitchCase="apiStatus.loaded">
+        <div class="block" *ngIf="isSearching">
+          <p
+            class="notification is-light"
+            [ngClass]="AllPosts?.data?.length ? 'is-primary' : 'is-danger'"
+          >
+            {{ AllPosts?.data?.length || 0 }} results found for the search query
+            <strong>"{{ searchTerm }}"</strong>
+          </p>
+        </div>
+        <ng-container *ngFor="let post of AllPosts.data">
+          <div class="block">
+            <app-post-card
+              class="is-clickable"
+              [routerLink]="post.id"
+              [post]="post"
+              (deletePost)="handleDeletePostClick($event)"
+            ></app-post-card>
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngSwitchDefault> </ng-container>
+    </ng-container>
+  </ng-container>
+</div>
+
+<app-modal [isOpen]="isAddModalOpen" (closeModal)="closeAddModal()">
+  <form class="box" [formGroup]="createPostFormGroup">
+    <div class="field">
+      <label class="label">Title</label>
+      <div class="control">
+        <input
+          class="input"
+          type="text"
+          placeholder="Title"
+          name="title"
+          formControlName="title"
+          [ngClass]="{
+            'is-danger':
+              createPostFormGroup.get('title')?.invalid &&
+              (createPostFormGroup.get('title')?.dirty ||
+                createPostFormGroup.get('title')?.touched)
+          }"
+        />
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Description</label>
+      <div class="control">
+        <textarea
+          class="textarea has-fixed-size"
+          placeholder="Comments"
+          name="description"
+          formControlName="description"
+          [ngClass]="{
+            'is-danger':
+              createPostFormGroup.get('text')?.invalid &&
+              (createPostFormGroup.get('text')?.dirty ||
+                createPostFormGroup.get('text')?.touched)
+          }"
+        ></textarea>
+      </div>
+    </div>
+
+    <button
+      class="button is-dark"
+      (click)="createNewPost($event)"
+      [disabled]="createPostFormGroup.invalid"
+    >
+      Create Post
+    </button>
+  </form>
+</app-modal>

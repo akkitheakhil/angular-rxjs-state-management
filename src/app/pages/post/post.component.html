@@ -1,0 +1,27 @@
+<div class="container p-4">
+  <div class="columns is-vcentered is-mobile">
+    <div class="column">
+      <h1 class="title is-clickable" routerLink="/">Post</h1>
+    </div>
+  </div>
+  <div class="block">
+    <ng-container *ngIf="getOnePost$ | async as Post">
+      <ng-container [ngSwitch]="Post.state">
+        <ng-container *ngSwitchCase="apiStatus.loading">
+          <progress class="progress is-large is-primary" max="100">
+            60%
+          </progress>
+        </ng-container>
+        <ng-container *ngSwitchCase="apiStatus.loaded">
+          <div class="block mt-6">
+            <app-post-card
+              [needDeleteButton]="false"
+              [post]="Post.data"
+            ></app-post-card>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchDefault> </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

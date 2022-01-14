@@ -1,0 +1,11 @@
+<div class="modal" [ngClass]="{ 'is-active': isOpen }">
+  <div class="modal-background" (click)="handleCloseModal()"></div>
+  <div class="modal-content">
+    <ng-content></ng-content>
+  </div>
+  <button
+    class="modal-close is-large"
+    aria-label="close"
+    (click)="handleCloseModal()"
+  ></button>
+</div>
